@@ -2,7 +2,7 @@
 **[可以參考HACKMD上比較漂亮的說明](https://hackmd.io/@JyunWei-Su/ICLAB-script)**
 ## 功能介紹
 1. **登入時顯示目前 quota 百分比**
-    ![](https://hackmd.io/_uploads/BJEdAREzT.png
+    ![](https://hackmd.io/_uploads/BJEdAREzT.png)
 
 2. **快速切換資料夾**
     ```
