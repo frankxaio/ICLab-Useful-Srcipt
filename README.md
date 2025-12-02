@@ -80,6 +80,9 @@ $ prj
 
 ### 快速檢查合成結果
 
+-   輸入 check_syn 檢查合成結果
+-   輸入 rpt timing, rpt power,.. 查看各種合成報告
+
 
 
 ### 快速檢查 vcs.log syn.log

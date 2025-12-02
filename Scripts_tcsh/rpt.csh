@@ -13,8 +13,8 @@ if ( ! -d "$dir" ) then
 endif
 
 if ( $#argv == 0 ) then
-    echo "Available extensions under $dir:"
-    ls "$dir" | sed -E 's/.*\.//' | sort -u
+    echo "Listing all reports in $dir :"
+    ls -l "$dir"
 else
     set ext = "$1"
 
