@@ -1,0 +1,122 @@
+# =====================================================
+#  ICLAB User Environment Configuration (.tcshrc)
+#  Optimized Version: 2025
+# =====================================================
+
+# -----------------------------------------------------
+# 1. Basic Environment Settings
+# -----------------------------------------------------
+umask 022                    # Set default file permissions
+setenv EDITOR vim            # Set default editor to vim
+setenv PAGER less            # Set default pager
+setenv BLOCKSIZE K           # Set block size for ls -s to K
+
+# Color support (Enable colors for ls and grep)
+setenv CLICOLOR 1
+setenv LS_COLORS 'di=34:ln=35:so=32:pi=33:ex=31:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43'
+
+# -----------------------------------------------------
+# 2. History & Auto-completion
+# -----------------------------------------------------
+set history = 2000           # Increase history size
+set savehist = (2000 merge)  # Merge history on logout instead of overwriting
+set histfile = ~/.tcsh_history
+
+set autolist = ambiguous     # List choices when completion is ambiguous
+set complete = enhance       # Enhanced completion (case-insensitive, etc.)
+set recexact                 # Allow exact matches
+set autoexpand               # Auto-expand variables
+# set correct = cmd            # Auto-correct mistyped commands (Spell Check)
+set rmstar                   # Ask for confirmation when executing 'rm *'
+
+# -----------------------------------------------------
+# 3. Directory Stack
+# -----------------------------------------------------
+set pushdtohome              # 'pushd' with no arguments goes to home
+set pushdsilent              # Do not print directory stack on pushd/popd
+set autopushd                # Auto-pushd on 'cd' (allows using 'popd' to go back)
+set dunique                  # Do not store duplicate paths in the stack
+
+# -----------------------------------------------------
+# 4. Prompt Customization
+# -----------------------------------------------------
+# Define color variables
+set P_GREEN  = "%{\033[0;32m%}"
+set P_BLUE   = "%{\033[0;34m%}"
+set P_YELLOW = "%{\033[1;33m%}"
+set P_RED    = "%{\033[0;31m%}"
+set P_CYAN   = "%{\033[0;36m%}"
+set P_NC     = "%{\033[0m%}"
+
+# Set Prompt Format:
+# [User@Host] Path >
+# Root user shows Red, normal user shows Green
+
+if ( $uid == 0 ) then
+    set prompt = "${P_RED}[%n@%m]${P_NC} ${P_CYAN}%~ ${P_RED}>${P_NC} "
+else
+    # 一般使用者
+    set prompt = "${P_GREEN}[%n@%m]${P_NC} ${P_YELLOW}%~ ${P_NC}> "
+endif
+
+# Clean up temporary variables
+unset P_GREEN P_BLUE P_YELLOW P_RED P_CYAN P_NC
+
+# Set Window Title to User@Host:Path
+alias precmd 'echo -n "\033]0;${USER}@${HOST}:$cwd\007"'
+
+
+# -----------------------------------------------------
+# 5. Key Bindings (Make navigation easier)
+# -----------------------------------------------------
+bindkey "\e[1~" beginning-of-line    # Home key: Go to beginning of line
+bindkey "\e[4~" end-of-line          # End key: Go to end of line
+bindkey "\e[3~" delete-char          # Delete key: Delete character
+bindkey "^W" backward-delete-word    # Ctrl+W: Delete previous word
+
+# Smart History Search:
+# Type 'git' then press Up arrow to search only commands starting with 'git'
+bindkey "\e[5~" history-search-backward # PageUp
+bindkey "\e[6~" history-search-forward  # PageDown
+bindkey "^[[A" history-search-backward  # Up Arrow
+bindkey "^[[B" history-search-forward   # Down Arrow
+
+# -----------------------------------------------------
+# 6. Aliases
+# -----------------------------------------------------
+
+# >> Safety Aliases
+# alias rm 'rm -i'
+# alias cp 'cp -i'
+# alias mv 'mv -i'
+
+# >> Navigation
+alias ..   'cd ..'
+alias ...  'cd ../..'
+alias .... 'cd ../../..'
+alias -    'cd -'                    # Go to previous directory
+
+# >> File Listings
+alias ls   'ls --color=auto'         # Enable colors
+# alias ls 'ls -G'                   # Use this for BSD/MacOS
+alias la   'ls -A'                   # Show hidden files
+alias ll   'ls -lFh'                 # Long list + file type + human readable sizes (k/m/g)
+alias l    'll'
+alias d    'dirs -v'                 # Show directory stack
+
+# >> Tools
+alias h    'history 25'              # Show last 25 commands
+alias c    'clear'                   # Clear screen
+alias grep 'grep --color=auto'       # Highlight grep results
+alias mkdir 'mkdir -p'               # Create parent directories if needed
+alias dut  'du -sh * | sort -rh'     # Show disk usage of current folder sorted by size
+
+# >> Custom Functions
+alias ff 'find . -name "\!*" -ls'    # Find files by name
+alias bk 'cp \!^ \!^.bak'            # Quick backup (file -> file.bak)
+
+# =====================================================
+# 7. Project Bootstrap Alias
+# =====================================================
+
+alias prj 'source ~/asic-script/Scripts_tcsh/project.csh'
