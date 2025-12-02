@@ -100,3 +100,6 @@ $ prj
 -   在 02_SYN 輸入 `check_warn` 檢查 syn.log
 
 ![image-20251203014157897](https://raw.githubusercontent.com/frankxaio/markdwon-image/main/data/image-20251203014157897.png)
+
+
+
