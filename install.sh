@@ -9,7 +9,7 @@ INSTALL_DIR="$HOME/asic-script"
 TEMP_DIR="$HOME/temp_git_install_$(date +%s)"
 
 # Specific files/folders to download
-TARGET_FOLDER="Script_tcsh"
+TARGET_FOLDER="Scripts_tcsh"
 TARGET_FILE=".tcshrc"
 
 # ANSI Colors for output
@@ -38,6 +38,15 @@ log_warn() {
 log_error() {
     echo -e "${RED}[ERROR]${NC} $1"
 }
+cleanup() {
+    if [ -d "$TEMP_DIR" ]; then
+        log_info "Cleaning up temporary files..."
+        rm -rf "$TEMP_DIR"
+        echo -e "${BLUE}[INFO]${NC} Temporary directory deleted: $TEMP_DIR"
+    fi
+}
+
+trap cleanup EXIT
 
 # ==============================================================================
 # Main Execution
@@ -54,22 +63,14 @@ log_info "Preparing installation directory: $INSTALL_DIR"
 mkdir -p "$INSTALL_DIR"
 mkdir -p "$TEMP_DIR"
 
-# 3. Clone repository using sparse-checkout (only structure, no files yet)
-log_info "Cloning repository structure from $REPO_URL..."
+# 3. Clone repository (Using shallow clone for compatibility with old git)
+log_info "Cloning repository (depth 1) from $REPO_URL..."
 cd "$TEMP_DIR" || exit
-git clone --filter=blob:none --no-checkout "$REPO_URL" .
+git clone --depth 1 "$REPO_URL" .
 
-# 4. Configure sparse-checkout to download only specific paths
-log_info "Configuring sparse-checkout for: $TARGET_FOLDER and $TARGET_FILE..."
-git sparse-checkout init --cone
-git sparse-checkout set "$TARGET_FOLDER" "$TARGET_FILE"
-
-# 5. Checkout content (Download actual files)
-log_info "Downloading files..."
-git checkout main
-
-# 6. Install 'Script_tcsh'
+# 4. Install 'Script_tcsh'
 log_info "Installing $TARGET_FOLDER to $INSTALL_DIR..."
+
 if [ -d "$INSTALL_DIR/$TARGET_FOLDER" ]; then
     log_warn "Existing $TARGET_FOLDER found. Overwriting..."
     rm -rf "$INSTALL_DIR/$TARGET_FOLDER"
@@ -79,10 +80,12 @@ if [ -d "$TARGET_FOLDER" ]; then
     cp -r "$TARGET_FOLDER" "$INSTALL_DIR/"
 else
     log_error "Folder $TARGET_FOLDER not found in the repository!"
+    log_error "Please check the repo content. Current files in repo:"
+    ls -F
     exit 1
 fi
 
-# 7. Install '.tcshrc' with User Confirmation
+# 5. Install '.tcshrc' with User Confirmation
 log_info "Processing .tcshrc configuration..."
 
 if [ -f "$TARGET_FILE" ]; then
@@ -93,9 +96,11 @@ if [ -f "$TARGET_FILE" ]; then
     echo -e "A new .tcshrc has been downloaded."
 
     # Interactive input
-    read -r -p "Do you want to overwrite your current ~/.tcshrc? (yes/no): " user_response
+    # Changed prompt to [y/N] to indicate No is the default behavior
+    read -r -p "Do you want to overwrite your current ~/.tcshrc? [y/N]: " user_response
 
-    # Check user input (case-insensitive for 'yes' or 'y')
+    # Check user input
+    # Only "y", "Y", "yes", "Yes", "YES" will trigger the overwrite.
     if [[ "$user_response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
 
         # Backup existing .tcshrc if it exists
@@ -110,22 +115,20 @@ if [ -f "$TARGET_FILE" ]; then
         log_success "Your ~/.tcshrc has been updated successfully!"
 
     else
-        # User said no
+        # User pressed Enter or typed anything other than yes/y
         SAVE_PATH="$INSTALL_DIR/tcshrc_downloaded"
         cp "$TARGET_FILE" "$SAVE_PATH"
-        log_info "Skipped overwriting. The new file is saved at: $SAVE_PATH"
+        log_info "Skipped overwriting (Default). The new file is saved at: $SAVE_PATH"
     fi
 
 else
     log_warn "File $TARGET_FILE not found in the repository."
 fi
 
-# 8. Cleanup
-log_info "Cleaning up temporary files..."
+# 6. Final Message
+# (Cleanup is handled automatically by trap upon exit)
 cd "$HOME" || exit
-rm -rf "$TEMP_DIR"
 
-# 9. Final Message
 echo ""
 echo -e "${GREEN}======================================================${NC}"
 echo -e "${GREEN}   Installation Completed Successfully!   ${NC}"
