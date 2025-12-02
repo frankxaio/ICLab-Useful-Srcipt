@@ -1,2 +1,1 @@
-
 `source install.sh` 的時候會在 $HOME/asic-script/ 下建立 Scripts_tcsh/ 目錄，並將相關腳本複製過去。
