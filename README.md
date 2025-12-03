@@ -3,11 +3,11 @@ Fork from https://github.com/JyunWei-Su/ICLab-Useful-Srcipt
 ## Install
 
 ```sh
+cd $HOME/Downloads/
 curl -O https://raw.githubusercontent.com/frankxaio/ICLab-Useful-Srcipt/main/install.sh
 ```
 
 ```sh
-cd $HOME
 bash instal.sh
 ```
 
@@ -17,7 +17,7 @@ bash instal.sh
 >
 >   ![image-20251203011140626](https://raw.githubusercontent.com/frankxaio/markdwon-image/main/data/image-20251203011140626.png)
 >
->   
+>
 
 ## 使用方法
 
@@ -60,21 +60,21 @@ $ prj
 
 ### 一鍵開啟 User guide
 
--   輸入 `doc_dw` 開啟 DesignWare IP 
+-   輸入 `doc_dw` 開啟 DesignWare IP
 
 -   輸入 `doc_io` 開啟 IO Pdf
 -   輸入 `doc_verdi` 開啟 Verdi ug
--   輸入 `doc_soc` 切換到 INNOVUS user guide 資料夾 
+-   輸入 `doc_soc` 切換到 INNOVUS user guide 資料夾
 -   ...
 
 
 
 ### 快速模擬 RTL, SYN, GATE, POST
 
--   輸入 `rtl` 執行 rtl simulation 
--   輸入 `syn` 執行 synthesis 
+-   輸入 `rtl` 執行 rtl simulation
+-   輸入 `syn` 執行 synthesis
 -   輸入 `gate` 執行 gate-level simulation
--   輸入 `post` 執行 post simulation 
+-   輸入 `post` 執行 post simulation
 
 ![image-20251203012543088](https://raw.githubusercontent.com/frankxaio/markdwon-image/main/data/image-20251203012543088.png)
 
