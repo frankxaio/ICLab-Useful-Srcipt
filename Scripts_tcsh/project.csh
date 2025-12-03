@@ -13,7 +13,7 @@ setenv NC '\033[0m' # No Color
 
 # -------------------- Paths --------------------------
 setenv ROOT_PATH `pwd`
-setenv SCRIPT_PATH "$HOME/asic-script/Scripts_tcsh"
+setenv SCRIPT_PATH "$HOME/.asic-script/Scripts_tcsh"
 setenv SYN_FILE "$ROOT_PATH/02_SYN/syn.tcl"
 
 # Parse makefile and syn file using shell commands
@@ -134,7 +134,7 @@ alias check_warn 'tcsh "$SCRIPT_PATH/check_warn.csh"'
 
 alias quota 'tcsh "$SCRIPT_PATH/quota.csh"'
 
-alias update_project_env 'bash $HOME/install.sh'
+alias update-project-env 'bash $HOME/install.sh'
 
 alias prj_help ' \
     echo "${GREEN}+---------------+----------------------------------------------------------------+${NC}"; \
